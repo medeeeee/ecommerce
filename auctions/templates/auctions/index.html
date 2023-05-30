@@ -1,0 +1,28 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+
+    {% for auction in auctions %} 
+    <div class="card mb-3">
+        <img width="30%"class="card-img-mb-3 " src="{{auction.url}}" alt="NO IMAGE">
+        <div class="card-body">
+          {% if auction.closed == True %} 
+          <div class="alert alert-info">
+            <h3>Auction closed</h3>
+          </div>
+          {% endif %}
+          <h5 class="card-title"><a href="{% url 'auction' auction.id %}">{{auction.title.capitalize}}</a></h5>
+          <p class="card-text">{{auction.desc.capitalize}}</p>
+          {% for bid in bids %} 
+          {% if bid.listing == auction %}
+            <p class="card-text">Current price: {{bid.price}}$</p>
+            {%endif%}
+          {%endfor%}
+          
+          <p class="card-text">Starting price: {{auction.price}}$</p>
+          <p class="card-text"><small class="text-muted">{{auction.date}}</small></p>
+        </div>
+      </div>
+    {%endfor%}
+{% endblock %}

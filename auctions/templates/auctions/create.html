@@ -1,0 +1,50 @@
+{% extends "auctions/layout.html" %} 
+{% block title %} 
+Create Listing
+{%endblock%} 
+{% block body %} 
+
+{%if message %}
+{{message}}
+{%endif%}
+<h2>Create listing:</h2>
+
+
+
+    <form action="{% url 'create' %}" method="POST">
+
+        
+        {% csrf_token %}
+        <div class="container">
+
+            {% if alert %} 
+            <div class="alert alert-danger">
+                {{alert}}
+            </div>
+            {% endif%}
+            <div class="form-group">
+                <label for="title">Title:*</label>
+                <textarea name="title"id="title" class="form-control" placeholder="Insert title for the listing"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="desc">Description:*</label>
+                <textarea name="desc" id="desc" class="form-control" rows="7"placeholder="Insert description for the listing"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="bid">Starting bid:*</label>
+                <textarea name="bid"id="bid" class="form-control" placeholder="Insert bid for the listing"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="url">Image url:</label>
+                <textarea name="url"id="url" class="form-control" placeholder="Insert image url for the listing"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="category">Categories:</label>
+                <textarea name="category"id="category" class="form-control" placeholder="Insert category for the listing"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        
+    </form>
+</div>
+{%endblock%}

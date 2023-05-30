@@ -1,0 +1,143 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+
+{{auction.title.capitalize}}
+
+{% endblock %}
+
+{% block body %} 
+
+
+ 
+
+<div class="card-container">
+    
+    {% if auction.user == user %} 
+    <div class="alert alert-info"><h2>You are the owner of this listing</h2></div>
+    {% if auction.closed == False%}
+    <form action="{% url 'auctionClosed' auction.id%}"method="GET">
+        {%csrf_token%} 
+        <button class="btn btn-danger" type="submit">Close the auction</button>
+    </form>
+    {%endif%}
+    {%endif%}
+    {% if alert1 %} 
+    <div class="alert alert-danger">
+       {{alert1}} 
+    </div>
+    {% endif %}
+
+    {% if alertBid %} 
+    <div class="alert alert-primary">
+       {{alertBid}} 
+    </div>
+    {% endif %}
+    {% if user.is_authenticated and not auction.user == user%}
+    <form action="{% url 'ARWatch' auction.id %}" method="POST">
+        {%csrf_token%} 
+        {% if a == False %} 
+        <button class="btn btn-danger" type="submit" value="Remove">Remove to watchlist</button>
+        {%else%}
+        <button class="btn btn-success" type="submit" value="Add">Add to watchlist</button>
+    </form>
+    {%endif%}
+    {%endif%}
+    <div class="card-body">
+        <label for="h5">Title:</label>
+        <h5 class="card-title">{{auction.title.capitalize}}<h5>       
+    </div>
+    {% if auction.url %}
+    <div>
+        
+        <img width="30%" src="{{auction.url}}"></img>
+    </div>
+    {%endif%}
+    <div class="card-body">
+        <label for="h5">Description:</label>
+        <h5 class="card-text">{{auction.desc}}</h5>
+        
+    </div>
+    {%if auction.category %}
+    <div class="card-body">
+        <label for="h5">Category:</label>
+        <h5 class="card-text">{{auction.category}}</h5>
+        
+    </div>
+    {%endif%}
+    <div class="card-body">
+        <label for="h5">Posted by:</label>
+        <h5 class="card-light">{{auction.user}}<small class="text-muted"> on {{auction.date}}</small></h5>
+    </div>
+    <div class="card-body">
+        <label for="h5">Starting bid:</label>
+        <h5 class="card-light">{{auction.price}}$</h5>
+    </div>
+
+    
+    
+    <div class=="card-body">
+        <div class="card-body">
+        <label for="h5">Current bid:</label>
+        
+        <h5 class="card-light">{{m.price}}$</h5>
+        <label for="h5">Current winner:</label>
+        
+        <h5 class="card-light">{{m.user}}</h5>
+        {% if auction.closed == False and user.is_authenticated and request.user != auction.user %} 
+        <form action="{% url 'newBid' auction.id%}" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <input id="newBid"name="newBid"type="number">
+                <button class="btn btn-success" type="submit"  value="Send bid">send bid</button>
+            </div>
+        </form>
+        {% if a1%} 
+        <div class="alert alert-danger">
+            {{a1}} 
+         </div>
+         {% endif %}
+     
+
+    </div>
+    {% elif auction.closed == True and request.user == m.user %}
+    <div class="alert alert-success">
+        <h3>You won the auction!</h3>
+    </div>
+    {% elif auction.closed == True and request.user != m.user%}
+    <div class="alert alert-info">
+        <h3>Auction closed</h3>
+    </div>
+    {% endif%}
+    {% if comments %}
+    <div class="card-body">
+        <label>Comments:</label>
+        {% for comment in comments %} 
+        
+        <h5><strong>{{comment.user}}:</strong> {{comment.content}}</h5>
+        
+        {% endfor %}
+    </div>
+    {% endif%}
+    {% if user.is_authenticated%}
+    <div class="card-body">
+       
+        <form action="{% url 'auction' auction.id %}" method="POST">
+            {% csrf_token %}
+            
+            
+            <div class="form-group">
+                <label for="comments">Comment something!</label>
+                <textarea name="content" id="content" class="form-control" rows="3"></textarea>
+                
+            </div>
+            <input class="btn btn-primary"type="submit" value="Post"></input>
+        </form>
+    </div>
+    {% endif%}
+    
+    
+</div>
+    
+    
+{% endblock %}
